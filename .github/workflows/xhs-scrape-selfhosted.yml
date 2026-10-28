@@ -3,7 +3,7 @@ name: 小红书视频品牌刮削（自托管·本地真实浏览器）
 # 说明：
 # - 必须先把本机注册为 GitHub 自托管 runner（Settings → Actions → Runners → New self-hosted runner）。
 # - 本机需保持：调试版 Chrome（9222）运行 + 已登录小红书。
-# - 这样 GitHub 负责“定时调度”，实际抓取用你本机的真实 Chrome 和家用 IP。
+# - run: 块内只使用 ASCII 字符（Windows PowerShell 5.1 对中文 .ps1 有编码问题）。
 
 on:
   schedule:
@@ -29,7 +29,7 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 检查调试 Chrome（9222）
+      - name: 检查调试 Chrome (9222)
         shell: powershell
         run: |
           $ok = $false
@@ -38,7 +38,7 @@ jobs:
             $ok = $true
           } catch {}
           if (-not $ok) {
-            throw "调试 Chrome 未运行。请先双击项目里的 启动调试Chrome.bat，并保持窗口/Chrome 开启。"
+            throw "Debug Chrome (9222) is not running. Run start_chrome_debug.bat first and keep it open."
           }
 
       - name: 安装 Python 依赖
@@ -59,5 +59,5 @@ jobs:
           & $git config user.name "github-actions[bot]"
           & $git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           & $git add data/
-          & $git commit -m "chore: 更新品牌刮削结果 $(Get-Date -Format yyyy-MM-dd)" --allow-empty
+          & $git commit -m "chore: update scrape results $(Get-Date -Format yyyy-MM-dd)" --allow-empty
           & $git push
