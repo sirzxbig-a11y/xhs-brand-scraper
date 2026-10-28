@@ -1,0 +1,10 @@
+# 小红书视频品牌刮削 - Python 依赖
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+playwright>=1.44
+apscheduler>=3.10,<4
+requests>=2.31
+dashscope>=1.20
+imageio-ffmpeg>=0.5
+numpy>=1.26

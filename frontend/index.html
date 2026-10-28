@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小红书视频品牌刮削</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>小红书视频品牌刮削</h1>
+      <span class="subtitle">本地自动化 · 画面 OCR + 口播 ASR + 品牌归一</span>
+    </div>
+    <div id="status-pill" class="pill">加载中…</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="bloggers">博主管理</button>
+    <button class="tab" data-tab="config">API 配置</button>
+    <button class="tab" data-tab="data">数据展示</button>
+    <button class="tab" data-tab="logs">运行日志</button>
+  </nav>
+
+  <!-- 博主管理 -->
+  <section id="tab-bloggers" class="panel active">
+    <div class="card">
+      <div class="row-between">
+        <h2>小红书登录</h2>
+        <button id="login-btn" class="btn primary">打开浏览器登录</button>
+      </div>
+      <p class="hint" id="login-status">点击按钮会弹出浏览器，请完成验证码并扫码登录；登录成功后会自动开始抓取。</p>
+    </div>
+
+    <div class="card">
+      <h2>新增博主</h2>
+      <form id="blogger-form" class="form-grid">
+        <label>昵称 *<input id="b-nickname" type="text" placeholder="博主昵称"></label>
+        <label>博主ID（小红书号）*<input id="b-id" type="text" placeholder="小红书号"></label>
+        <label>主页链接（选填）<input id="b-home" type="text" placeholder="https://www.xiaohongshu.com/user/profile/..."></label>
+        <button type="submit" class="btn primary">新增 / 更新</button>
+      </form>
+      <p class="hint">有主页链接优先用链接；无链接则通过昵称搜索。每次修改自动写入配置并刷新。</p>
+    </div>
+
+    <div class="card">
+      <h2>博主列表</h2>
+      <table class="table">
+        <thead>
+          <tr><th>昵称</th><th>小红书号</th><th>状态</th><th>最近抓取</th><th>操作</th></tr>
+        </thead>
+        <tbody id="blogger-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- API 配置 -->
+  <section id="tab-config" class="panel">
+    <div class="card">
+      <h2>API Key 配置</h2>
+      <form id="config-form" class="form-stack">
+        <h3>DeepSeek（视觉 OCR + 品牌抽取）</h3>
+        <div class="form-grid">
+          <label>DeepSeek API Key<input id="c-deepseek-key" type="password" placeholder="sk-..."></label>
+          <label>Base URL<input id="c-deepseek-base" type="text" placeholder="https://api.deepseek.com"></label>
+          <label>视觉模型<input id="c-vision-model" type="text" placeholder="qwen3-vl-plus"></label>
+          <label>文本模型<input id="c-llm-model" type="text" placeholder="deepseek-chat"></label>
+        </div>
+
+        <h3>口播 ASR 服务商</h3>
+        <label>服务商
+          <select id="c-asr-provider">
+            <option value="aliyun">阿里云（DashScope Paraformer）</option>
+            <option value="tencent">腾讯云（一句话识别）</option>
+          </select>
+        </label>
+        <div class="form-grid">
+          <label>阿里云 DashScope Key<input id="c-aliyun-key" type="password" placeholder="sk-..."></label>
+          <label>腾讯云 SecretId<input id="c-tencent-id" type="password"></label>
+          <label>腾讯云 SecretKey<input id="c-tencent-key" type="password"></label>
+          <label>腾讯云 AppId（选填）<input id="c-tencent-appid" type="text"></label>
+        </div>
+
+        <button type="submit" class="btn primary">保存配置</button>
+        <span id="config-msg" class="msg"></span>
+      </form>
+    </div>
+  </section>
+
+  <!-- 数据展示 -->
+  <section id="tab-data" class="panel">
+    <div class="card">
+      <div class="row-between">
+        <h2>抓取进度</h2>
+        <button id="data-refresh" class="btn">刷新数据</button>
+      </div>
+      <p class="hint">实时显示每个博主的抓取阶段、当前视频序号与耗时。</p>
+      <div id="progress-list" class="progress-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>品牌数据</h2>
+      <p class="hint">层级：博主 → 品牌 → 视频条目。同一视频可出现在多个品牌下，仅展示对应品牌时间段。</p>
+      <div id="data-tree" class="tree"></div>
+    </div>
+  </section>
+
+  <!-- 运行日志 -->
+  <section id="tab-logs" class="panel">
+    <div class="card">
+      <div class="row-between">
+        <h2>运行日志</h2>
+        <div>
+          <label class="inline-check"><input id="log-autoscroll" type="checkbox" checked> 自动滚动</label>
+          <button id="log-clear" class="btn small">清空显示</button>
+        </div>
+      </div>
+      <p class="hint">实时显示后端抓取进度与报错；日志同时写入 data/app.log。</p>
+      <div id="log-view" class="log-view"></div>
+    </div>
+  </section>
+
+  <footer class="footer">本地常驻后端 · 每日自动全量重抓 · 不下载视频，仅截屏与音频流识别</footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

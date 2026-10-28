@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# 登录态与密钥，绝不提交
+browser_profile/
+data/api_keys.json
+data/cookie_for_github.txt
+
+# 抓取中间产物（截帧、音频）
+data/tmp/
+data/app.log
