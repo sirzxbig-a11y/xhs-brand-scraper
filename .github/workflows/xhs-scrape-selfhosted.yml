@@ -4,6 +4,7 @@ name: 小红书视频品牌刮削（自托管·本地真实浏览器）
 # - 必须先把本机注册为 GitHub 自托管 runner（Settings → Actions → Runners → New self-hosted runner）。
 # - 本机需保持：调试版 Chrome（9222）运行 + 已登录小红书。
 # - run: 块内只使用 ASCII 字符（Windows PowerShell 5.1 对中文 .ps1 有编码问题）。
+# - 提交步骤会在缺少 .git 时自行初始化仓库，不依赖 checkout 的 git 检测。
 
 on:
   schedule:
@@ -53,11 +54,22 @@ jobs:
 
       - name: 提交抓取结果
         shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           $git = "C:\Program Files\Git\cmd\git.exe"
           if (-not (Test-Path $git)) { $git = "git" }
+          $url = "https://x-access-token:$($env:GH_TOKEN)@github.com/sirzxbig-a11y/xhs-brand-scraper.git"
+          if (-not (Test-Path ".git")) {
+            & $git init | Out-Null
+            & $git remote add origin $url
+            & $git fetch origin main --depth=1
+            & $git reset --soft origin/main
+          } else {
+            & $git remote set-url origin $url 2>&1 | Out-Null
+          }
           & $git config user.name "github-actions[bot]"
           & $git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           & $git add data/
           & $git commit -m "chore: update scrape results $(Get-Date -Format yyyy-MM-dd)" --allow-empty
-          & $git push
+          & $git push origin main
