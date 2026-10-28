@@ -1,0 +1,61 @@
+name: 小红书视频品牌刮削（自托管·本地真实浏览器）
+
+# 说明：
+# - 必须先把本机注册为 GitHub 自托管 runner（Settings → Actions → Runners → New self-hosted runner）。
+# - 本机需保持：调试版 Chrome（9222）运行 + 已登录小红书。
+# - 这样 GitHub 负责“定时调度”，实际抓取用你本机的真实 Chrome 和家用 IP。
+
+on:
+  schedule:
+    # UTC 18:30 = 北京时间 02:30
+    - cron: "30 18 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: [self-hosted, windows]
+    timeout-minutes: 180
+    env:
+      XHS_CDP: "http://127.0.0.1:9222"
+      XHS_COOKIE: ${{ secrets.XHS_COOKIE }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ALIYUN_APP_KEY: ${{ secrets.ALIYUN_APP_KEY }}
+      ASR_PROVIDER: aliyun
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 检查调试 Chrome（9222）
+        shell: pwsh
+        run: |
+          $ok = $false
+          try {
+            $null = Invoke-WebRequest "http://127.0.0.1:9222/json/version" -UseBasicParsing -TimeoutSec 3
+            $ok = $true
+          } catch {}
+          if (-not $ok) {
+            throw "调试 Chrome 未运行。请先双击项目里的 启动调试Chrome.bat，并保持窗口/Chrome 开启。"
+          }
+
+      - name: 安装 Python 依赖
+        shell: pwsh
+        run: |
+          python -m pip install -r requirements.txt
+          python -m playwright install chromium
+
+      - name: 执行抓取（走本机真实 Chrome）
+        shell: pwsh
+        run: python scripts/headless_run.py
+
+      - name: 提交抓取结果
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore: 更新品牌刮削结果 $(Get-Date -Format yyyy-MM-dd)" --allow-empty
+          git push
