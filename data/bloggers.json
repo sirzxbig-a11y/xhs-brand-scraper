@@ -4,9 +4,9 @@
       "id": "jellyjellyear",
       "nickname": "绒耳朵儿",
       "home_url": "https://www.xiaohongshu.com/user/profile/5b9f6f33b2e7dc000145640f",
-      "status": "失败",
-      "last_scraped_at": "2026-10-28T03:00:09+08:00",
-      "error": "未收集到任何视频：可能未登录、被风控拦截，或主页链接/页面选择器失效。请确认已扫码登录后重新抓取。"
+      "status": "正常",
+      "last_scraped_at": "2026-10-29T01:43:49+08:00",
+      "error": null
     }
   ]
 }

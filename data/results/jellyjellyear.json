@@ -1,8 +1,67 @@
 {
   "blogger_id": "jellyjellyear",
   "nickname": "绒耳朵儿",
-  "scraped_at": "2026-10-28T01:54:50+08:00",
+  "scraped_at": "2026-10-29T01:43:49+08:00",
   "videos": [
+    {
+      "note_id": "6adcca73000000003302bde1",
+      "title": "12条！《秋冬下装必吃榜👖》版型好贼百搭！",
+      "published_at": "",
+      "url": "https://www.xiaohongshu.com/user/profile/5b9f6f33b2e7dc000145640f/6adcca73000000003302bde1?xsec_token=AB50EqZg3o7GMqTHPh0ycNwrtihxSEKLaeFDUzD6Em7JI=&xsec_source=pc_user",
+      "brands": {
+        "路易威登": {
+          "visual": [
+            [
+              4,
+              8
+            ],
+            [
+              76,
+              80
+            ],
+            [
+              88,
+              92
+            ],
+            [
+              108,
+              112
+            ],
+            [
+              212,
+              220
+            ],
+            [
+              288,
+              296
+            ],
+            [
+              304,
+              308
+            ]
+          ],
+          "asr": []
+        },
+        "爱马仕": {
+          "visual": [
+            [
+              108,
+              112
+            ]
+          ],
+          "asr": []
+        },
+        "香奈儿": {
+          "visual": [
+            [
+              172,
+              176
+            ]
+          ],
+          "asr": []
+        }
+      }
+    },
     {
       "note_id": "6ac71fa9000000000201333c",
       "title": "年度1件封神外套🇷🇺俄罗斯10天9晚行李开箱",
