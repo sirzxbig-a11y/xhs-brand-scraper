@@ -46,11 +46,14 @@ def main() -> None:
         sys.exit(1)
 
     payload = json.dumps(out, ensure_ascii=False)
+    out_file = Path(__file__).resolve().parent.parent / "data" / "cookie_for_github.txt"
+    out_file.write_text(payload, encoding="utf-8")
     print("=" * 60)
     print("请把下面这整行复制为 GitHub Secret：XHS_COOKIE")
     print("=" * 60)
     print(payload)
     print("=" * 60)
+    print(f"已写入 UTF-8 文件：{out_file}")
 
 
 if __name__ == "__main__":

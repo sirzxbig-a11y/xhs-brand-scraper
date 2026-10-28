@@ -36,6 +36,12 @@ def main() -> None:
     from backend.pipeline import scrape_all_bloggers
     scrape_all_bloggers(headless=True)
 
+    # 若所有博主都失败（常见于数据中心 IP 被风控），让工作流失败以便及时发现
+    bloggers = config.load_bloggers()
+    if bloggers and all(b.get("status") in ("失败", "遇到风控") for b in bloggers):
+        print("[ERROR] 所有博主抓取失败（可能 IP 被风控或未登录），请查看日志。")
+        raise SystemExit(1)
+
 
 if __name__ == "__main__":
     main()
